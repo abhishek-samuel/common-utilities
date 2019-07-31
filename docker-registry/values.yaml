@@ -1,0 +1,12 @@
+deployment:
+  namespace: 'default'
+
+conf:
+  docker-registry:
+    pv:
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi
+      storageName: 'docker-registry-storage'
+      storageClassName: 'docker-storage-class'
+      claimName: 'docker-pvc'

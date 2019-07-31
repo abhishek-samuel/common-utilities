@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: registry-pv
+  labels:
+    pv: local
+spec:
+  storageClassName: {{ .Values.conf.docker-registry.pv.storageClassName }}
+  capacity:
+    storage: {{ .Values.conf.docker-registry.pv.size }}
+  accessModes: {{ .Values.conf.docker-registry.pv.accessModes }}
+  hostPath:
+    path: {{ .Values.conf.docker-registry.pv.mountPath }}

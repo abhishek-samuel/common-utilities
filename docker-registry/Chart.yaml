@@ -1,0 +1,11 @@
+name: docker-registry
+description: Docker Registry
+version: 0.0.1
+keywords:
+  - docker-registry
+sources:
+  - https://github.hpe.com/abhishek-samuel/common-utilities
+home: https://github.hpe.com/abhishek-samuel/common-utilities
+maintainers:
+  - name: Abhishek Samuel
+    email: abhishek.samuel@hpe.com
