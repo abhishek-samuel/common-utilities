@@ -8,7 +8,7 @@ metadata:
 spec:
   ports:
     - name: "5000"
-      port: 500
+      port: 5000
       targetPort: 5000
       nodePort: 32211
   selector:
