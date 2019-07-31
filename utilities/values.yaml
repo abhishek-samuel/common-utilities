@@ -27,5 +27,5 @@ conf:
         - ReadWriteOnce
       size: 5Gi
       mountPath: '/pv/docker-registry'
-      storageClassName: 'docker-storage-class'
-      claimName: 'docker-pvc'
+      storageClassName: 'registry-storage-class'
+      claimName: 'registry-pvc'

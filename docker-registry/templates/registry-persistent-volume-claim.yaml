@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.conf.dockerRegistry.pv.claimName }}
   namespace: {{ .Values.deployment.namespace }}
   labels:
-    pv: docker-registry-pvc
+    pv: registry-pvc
 spec:
   storageClassName: {{ .Values.conf.dockerRegistry.pv.storageClassName }}
   accessModes: {{ .Values.conf.dockerRegistry.pv.accessModes }}

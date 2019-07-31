@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: registry-pv
   labels:
-    pv: local
+    pv: registry-pv
 spec:
   storageClassName: {{ .Values.conf.dockerRegistry.pv.storageClassName }}
   capacity:
