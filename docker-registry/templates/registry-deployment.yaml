@@ -20,14 +20,14 @@ spec:
       hostname: docker-registry
       restartPolicy: Always
       volumes:
-        - name: {{ .Values.conf.docker-registry.pv.storageName }}
+        - name: {{ .Values.conf.dockerRegistry.pv.storageName }}
           persistentVolumeClaim:
-            claimName: {{ .Values.conf.docker-registry.pv.claimName }}
+            claimName: {{ .Values.conf.dockerRegistry.pv.claimName }}
       containers:
         - name: registry
           image: registry:2
           ports:
             - containerPort: 5000
           volumeMounts:
-            - name: {{ .Values.conf.docker-registry.pv.storageName }}
+            - name: {{ .Values.conf.dockerRegistry.pv.storageName }}
               mountPath: /var/lib/registry

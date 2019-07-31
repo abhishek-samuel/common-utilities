@@ -21,7 +21,7 @@ conf:
     deployment:
       namespace: 'logging'
 
-  docker-registry:
+  dockerRegistry:
     pv:
       accessModes:
         - ReadWriteOnce

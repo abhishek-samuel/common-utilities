@@ -5,9 +5,9 @@ metadata:
   labels:
     pv: local
 spec:
-  storageClassName: {{ .Values.conf.docker-registry.pv.storageClassName }}
+  storageClassName: {{ .Values.conf.dockerRegistry.pv.storageClassName }}
   capacity:
-    storage: {{ .Values.conf.docker-registry.pv.size }}
-  accessModes: {{ .Values.conf.docker-registry.pv.accessModes }}
+    storage: {{ .Values.conf.dockerRegistry.pv.size }}
+  accessModes: {{ .Values.conf.dockerRegistry.pv.accessModes }}
   hostPath:
-    path: {{ .Values.conf.docker-registry.pv.mountPath }}
+    path: {{ .Values.conf.dockerRegistry.pv.mountPath }}

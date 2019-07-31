@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.conf.docker-registry.pv.claimName }}
+  name: {{ .Values.conf.dockerRegistry.pv.claimName }}
   namespace: {{ .Values.deployment.namespace }}
   labels:
     pv: docker-registry-pvc
 spec:
-  storageClassName: {{ .Values.conf.docker-registry.pv.storageClassName }}
-  accessModes: {{ .Values.conf.docker-registry.pv.accessModes }}
+  storageClassName: {{ .Values.conf.dockerRegistry.pv.storageClassName }}
+  accessModes: {{ .Values.conf.dockerRegistry.pv.accessModes }}
   resources:
     requests:
-      storage: {{ .Values.conf.docker-registry.pv.size }}
+      storage: {{ .Values.conf.dockerRegistry.pv.size }}

@@ -2,7 +2,7 @@ deployment:
   namespace: 'default'
 
 conf:
-  docker-registry:
+  dockerRegistry:
     pv:
       accessModes:
         - ReadWriteOnce
