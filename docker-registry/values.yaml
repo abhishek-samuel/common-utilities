@@ -7,6 +7,7 @@ conf:
       accessModes:
         - ReadWriteOnce
       size: 5Gi
+      mountPath: '/pv/docker-registry'
       storageName: 'registry-storage'
       storageClassName: 'registry-storage-class'
       claimName: 'registry-pvc'
