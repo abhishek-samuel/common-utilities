@@ -26,7 +26,7 @@ spec:
       containers:
         - name: docker-registry-ui
           image: klausmeyer/docker-registry-browser
-          - env:
+          env:
             - name: DOCKER_REGISTRY_URL
               value: http://localhost:5000
           ports:
