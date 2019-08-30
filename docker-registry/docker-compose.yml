@@ -1,0 +1,16 @@
+version: '3'
+services:
+  docker-registry:
+    image: 'registry:2'
+    container_name: docker-registry
+    ports:
+      - '5000:5000'
+    restart: always
+
+  docker-registry-ui:
+    image: klausmeyer/docker-registry-browser
+    container_name: docker-registry-ui
+    ports:
+      - '8080:8080'
+    environment:
+      - 'DOCKER_REGISTRY_URL=http://docker-registry:5000'

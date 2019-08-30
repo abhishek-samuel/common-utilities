@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: docker-registry
+  name: {{ .Values.conf.dockerRegistry.name }}
   labels:
-    app: docker-registry
+    app: {{ .Values.conf.dockerRegistry.name }}
   namespace: {{ .Values.deployment.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: docker-registry
+      app: {{ .Values.conf.dockerRegistry.name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: docker-registry
+        app: {{ .Values.conf.dockerRegistry.name }}
     spec:
-      hostname: docker-registry
+      hostname: {{ .Values.conf.dockerRegistry.name }}
       restartPolicy: Always
       volumes:
         - name: {{ .Values.conf.dockerRegistry.pv.storageName }}
           persistentVolumeClaim:
             claimName: {{ .Values.conf.dockerRegistry.pv.claimName }}
       containers:
-        - name: registry
+        - name: {{ .Values.conf.dockerRegistry.name }}
           image: registry:2
           ports:
             - containerPort: 5000
