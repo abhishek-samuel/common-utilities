@@ -3,7 +3,6 @@ deployment:
 
 conf:
   dockerRegistry:
-    name: docker-registry
     pv:
       accessModes:
         - ReadWriteOnce
@@ -11,7 +10,4 @@ conf:
       mountPath: '/pv/docker-registry'
       storageName: 'registry-storage'
       storageClassName: 'registry-storage-class'
-      claimName: 'registry-pvc'
-
-  dockerRegistryUi:
-    name: docker-registry-ui
+      claimName: 'docker-registry-pvc'

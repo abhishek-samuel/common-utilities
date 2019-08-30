@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.conf.dockerRegistry.name }}
+  name: docker-registry
   labels:
-    app: {{ .Values.conf.dockerRegistry.name }}
+    app: docker-registry
   namespace: {{ .Values.deployment.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.conf.dockerRegistry.name }}
+      app: docker-registry
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ .Values.conf.dockerRegistry.name }}
+        app: docker-registry
     spec:
-      hostname: {{ .Values.conf.dockerRegistry.name }}
+      hostname: docker-registry
       restartPolicy: Always
       volumes:
         - name: {{ .Values.conf.dockerRegistry.pv.storageName }}
@@ -27,12 +27,12 @@ spec:
         - env:
             - name: DOCKER_REGISTRY_URL
               value: http://localhost:5000
-        - name: {{ .Values.conf.dockerRegistryUi.name }}
+        - name: docker-registry-ui
           image: klausmeyer/docker-registry-browser
           ports:
             - containerPort: 8080
           resources: {}
-        - name: {{ .Values.conf.dockerRegistry.name }}
+        - name: docker-registry
           image: registry:2
           ports:
             - containerPort: 5000

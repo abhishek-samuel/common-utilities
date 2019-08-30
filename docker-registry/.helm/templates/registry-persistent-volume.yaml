@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: registry-pv
+  name: docker-registry-pv
   labels:
-    pv: registry-pv
+    pv: docker-registry-pv
 spec:
   storageClassName: {{ .Values.conf.dockerRegistry.pv.storageClassName }}
   capacity:
