@@ -24,6 +24,14 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.conf.dockerRegistry.pv.claimName }}
       containers:
+        - env:
+            - name: DOCKER_REGISTRY_URL
+              value: http://localhost:5000
+        - name: {{ .Values.conf.dockerRegistryUi.name }}
+          image: klausmeyer/docker-registry-browser
+          ports:
+            - containerPort: 8080
+          resources: {}
         - name: {{ .Values.conf.dockerRegistry.name }}
           image: registry:2
           ports:
