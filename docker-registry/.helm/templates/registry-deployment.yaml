@@ -28,9 +28,9 @@ spec:
           image: klausmeyer/docker-registry-browser
           env:
             - name: DOCKER_REGISTRY_URL
-              value: http://localhost:5000
+              value: 'http://localhost:5000'
             - name: ENABLE_DELETE_IMAGES
-              value: true
+              value: 'true'
           ports:
             - containerPort: 8080
           resources: {}
