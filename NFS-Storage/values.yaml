@@ -1,0 +1,12 @@
+deployment:
+  namespace: 'default'
+
+nfs:
+  pv:
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+    mountPath: '/pv/nfs'
+    storageName: 'nfs-storage'
+    storageClassName: 'nfs-storage-class'
+    claimName: 'nfs-pvc'
