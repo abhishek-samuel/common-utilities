@@ -17,7 +17,7 @@ spec:
                 - name: nfs-server
                   args:
                     - /exports
-                  image: gcr.io/google_containers/volume-nfs:0.8
+                  image: cpuguy83/nfs-server
                   ports:
                       - name: nfs
                         containerPort: 2049
