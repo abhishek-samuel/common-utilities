@@ -9,5 +9,6 @@ spec:
     capacity:
         storage: {{ .Values.nfs.pv.size }}
     accessModes: {{ .Values.nfs.pv.accessModes }}
-    hostPath:
-        path: {{ .Values.nfs.pv.mountPath }}
+    nfs:
+        server: nfs-service.default.svc.cluster.local
+        path: "/"
