@@ -2,9 +2,11 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
     name: nfs-pvc
+    labels:
+        pv: nfs-pvc
 spec:
     accessModes: {{ .Values.nfs.pv.accessModes }}
-    storageClassName: ""
+    storageClassName: {{ .Values.nfs.pv.storageClassName }}
     resources:
         requests:
             storage: 10Gi

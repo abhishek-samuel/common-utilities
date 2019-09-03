@@ -2,10 +2,12 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
     name: nfs-pv
+    labels:
+        pv: nfs-pv
 spec:
+    storageClassName: {{ .Values.nfs.pv.storageClassName }}
     capacity:
-        storage: {{ .Values.nfs.pv.size }} # This size is used to match a volume to a tenents claim
-    accessModes: {{ .Values.nfs.pv.accessModes }} # Access modes are defined below
-    nfs:
-        server: nfs-server # Please change this to your NFS server
-        path: /exports # Please change this to the relevant share
+        storage: {{ .Values.nfs.pv.size }}
+    accessModes: {{ .Values.nfs.pv.accessModes }}
+    hostPath:
+        path: {{ .Values.nfs.pv.mountPath }}
