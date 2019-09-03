@@ -11,4 +11,4 @@ spec:
     accessModes: {{ .Values.nfs.pv.accessModes }}
     nfs:
         server: 10.152.183.221
-        path: "/nfs-pv-2"
+        path: "/pv/nfs/pv2"
