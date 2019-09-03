@@ -16,7 +16,7 @@ spec:
             containers:
                 - name: nfs-server
                   args:
-                    - /exports
+                    - '/exports'
                   image: cpuguy83/nfs-server
                   ports:
                       - name: nfs
