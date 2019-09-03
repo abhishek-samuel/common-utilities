@@ -10,5 +10,5 @@ spec:
         storage: {{ .Values.nfs.pv.size }}
     accessModes: {{ .Values.nfs.pv.accessModes }}
     nfs:
-        server: nfs-server.default.svc.cluster.local
+        server: 10.152.183.221
         path: "/nfs-pv-2"
