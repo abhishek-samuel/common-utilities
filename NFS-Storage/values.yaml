@@ -4,7 +4,7 @@ deployment:
 nfs:
   pv:
     accessModes:
-      - ReadWriteMany
+      - ReadWriteOnce
     size: 2Gi
     mountPath: '/pv/nfs'
     storageName: 'nfs-storage'
