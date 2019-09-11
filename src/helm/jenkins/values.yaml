@@ -52,7 +52,7 @@ master:
   # a restart loop.  Likewise if you disable the non-Jenkins identity store and instead use the Jenkins internal one,
   # you should revert master.adminUser to your preferred admin user:
   adminUser: "admin"
-  # adminPassword: <defaults to random>
+  adminPassword: "admin"
   # adminSshKey: <defaults to auto-generated>
   # If CasC auto-reload is enabled, an SSH (RSA) keypair is needed.  Can either provide your own, or leave unconfigured to allow a random key to be auto-generated.
   # If you supply your own, it is recommended that the values file that contains your key not be committed to source control in an unencrypted format
@@ -68,16 +68,29 @@ master:
       cpu: "2000m"
       memory: "4096Mi"
   # Environment variables that get added to the init container (useful for e.g. http_proxy)
-  # initContainerEnv:
-  #   - name: http_proxy
-  #     value: "http://192.168.64.1:3128"
-  # containerEnv:
-  #   - name: http_proxy
-  #     value: "http://192.168.64.1:3128"
+  initContainerEnv:
+    - name: http_proxy
+      value: "http://16.167.28.199:8080"
+    - name: https_proxy
+      value: "http://16.167.28.199:8080"
+    - name: no_proxy
+      value: "localhost,127.0.0.1,.ind.hpecorp.local,.svc.cluster.local"
+  containerEnv:
+    - name: http_proxy
+      value: "http://16.167.28.199:8080"
+    - name: https_proxy
+      value: "http://16.167.28.199:8080"
+    - name: no_proxy
+      value: "localhost,127.0.0.1,.ind.hpecorp.local,.svc.cluster.local"
+  javaOpts: >-
+    -Dhttp.proxyHost=16.167.28.199
+    -Dhttp.proxyPort=8080
+    -Dhttps.proxyHost=16.167.28.199
+    -Dhttps.proxyPort=8080
   # Set min/max heap here if needed with:
   # javaOpts: "-Xms512m -Xmx512m"
   # jenkinsOpts: ""
-  # jenkinsUrl: ""
+  jenkinsUrl: "http://ob4.ind.hpecorp.local:32766"  #http://hostname:nodePort
   # If you set this prefix and use ingress controller then you might want to set the ingress path below
   # jenkinsUriPrefix: "/jenkins"
   # Enable pod security context (must be `true` if runAsUser or fsGroup are set)
@@ -90,7 +103,7 @@ master:
   targetPort: 8080
   # For minikube, set this to NodePort, elsewhere use LoadBalancer
   # Use ClusterIP if your setup includes ingress controller
-  serviceType: LoadBalancer
+  serviceType: NodePort
   # Jenkins master service annotations
   serviceAnnotations: {}
   # Jenkins master custom labels
@@ -103,7 +116,7 @@ master:
   # Put labels on Jenkins master pod
   podLabels: {}
   # Used to create Ingress record (should used with ServiceType: ClusterIP)
-  # nodePort: <to set explicitly, choose port between 30000-32767
+  nodePort: 32766
   # Enable Kubernetes Liveness and Readiness Probes
   # ~ 2 minutes to allow Jenkins to restart when upgrading plugins. Set ReadinessTimeout to be shorter than LivenessTimeout.
   healthProbes: true
@@ -161,11 +174,25 @@ master:
 
   # List of plugins to be install during Jenkins master start
   installPlugins:
-    - kubernetes:1.18.1
-    - workflow-job:2.33
+    - kubernetes:1.19.0
+    - workflow-job:2.35
     - workflow-aggregator:2.6
-    - credentials-binding:1.19
-    - git:3.11.0
+    - credentials-binding:1.20
+    - git:3.12.1
+    - blueocean:1.19.0
+    - kubernetes-cd:2.1.2
+    - ansicolor:0.6.2   #Adds ANSI coloring to the Console Output
+    - artifactory:3.4.0   #This plugin allows deploying maven artifacts and build info to Artifactory
+    - build-timeout:1.19    #This plugin allows you to automatically abort a build if it's taking too long
+    - docker-workflow:1.19    #Build and use Docker containers from pipelines
+    - greenballs:1.15   #Changes Hudson to use green balls instead of blue for successful builds
+    - ghprb:1.42.0    #This plugin builds pull requests in github and report results
+    - modernstatus:1.2    #A modern status icon set for Jenkins
+    - timestamper:1.10    #Adds timestamps to the Console Output
+    - ws-cleanup:0.37   #This plugin deletes the project workspace after a build is finished
+    - parameterized-trigger:2.35.2    #This plugin lets you trigger new builds when your build has completed, with various ways of specifying parameters for the new build
+    - performance:3.17    #This plugin allows you to capture reports from popular testing tools
+    - perfpublisher:8.09    #This plugin generates global and trend reports for tests results analysis
 
   # Enable to always override the installed plugins with the values of 'master.installPlugins' on upgrade or redeployment.
   # overwritePlugins: true
@@ -354,8 +381,8 @@ master:
 
 agent:
   enabled: true
-  image: "jenkins/jnlp-slave"
-  tag: "3.27-1"
+  image: "joao29a/jnlp-slave-alpine-docker"
+  tag: "latest"
   customJenkinsLabels: []
   # name of the secret to be used for image pulling
   imagePullSecretName:
@@ -366,7 +393,7 @@ agent:
       cpu: "200m"
       memory: "256Mi"
     limits:
-      cpu: "200m"
+      cpu: "500m"
       memory: "256Mi"
   # You may want to change this to true while testing a new image
   alwaysPullImage: false
@@ -382,6 +409,9 @@ agent:
   # - name: PATH
   #   value: /usr/local/bin
   volumes:
+    - type: HostPath
+      hostPath: /var/run/docker.sock
+      mountPath: /var/run/docker.sock
   # - type: Secret
   #   secretName: mysecret
   #   mountPath: /var/myapp/mysecret
@@ -435,7 +465,7 @@ persistence:
   storageClass:
   annotations: {}
   accessMode: "ReadWriteOnce"
-  size: "8Gi"
+  size: "5Gi"
   volumes:
   #  - name: nothing
   #    emptyDir: {}
