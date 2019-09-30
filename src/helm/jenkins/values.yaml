@@ -52,6 +52,7 @@ master:
   # a restart loop.  Likewise if you disable the non-Jenkins identity store and instead use the Jenkins internal one,
   # you should revert master.adminUser to your preferred admin user:
   adminUser: "admin"
+  # adminPassword: <defaults to random>
   adminPassword: "admin"
   # adminSshKey: <defaults to auto-generated>
   # If CasC auto-reload is enabled, an SSH (RSA) keypair is needed.  Can either provide your own, or leave unconfigured to allow a random key to be auto-generated.
@@ -68,29 +69,16 @@ master:
       cpu: "2000m"
       memory: "4096Mi"
   # Environment variables that get added to the init container (useful for e.g. http_proxy)
-  initContainerEnv:
-    - name: http_proxy
-      value: "http://16.167.28.199:8080"
-    - name: https_proxy
-      value: "http://16.167.28.199:8080"
-    - name: no_proxy
-      value: "localhost,127.0.0.1,.ind.hpecorp.local,.svc.cluster.local"
-  containerEnv:
-    - name: http_proxy
-      value: "http://16.167.28.199:8080"
-    - name: https_proxy
-      value: "http://16.167.28.199:8080"
-    - name: no_proxy
-      value: "localhost,127.0.0.1,.ind.hpecorp.local,.svc.cluster.local"
-  javaOpts: >-
-    -Dhttp.proxyHost=16.167.28.199
-    -Dhttp.proxyPort=8080
-    -Dhttps.proxyHost=16.167.28.199
-    -Dhttps.proxyPort=8080
+  # initContainerEnv:
+  #   - name: http_proxy
+  #     value: "http://192.168.64.1:3128"
+  # containerEnv:
+  #   - name: http_proxy
+  #     value: "http://192.168.64.1:3128"
   # Set min/max heap here if needed with:
   # javaOpts: "-Xms512m -Xmx512m"
   # jenkinsOpts: ""
-  jenkinsUrl: "http://ob4.ind.hpecorp.local:32766"  #http://hostname:nodePort
+  # jenkinsUrl: ""
   # If you set this prefix and use ingress controller then you might want to set the ingress path below
   # jenkinsUriPrefix: "/jenkins"
   # Enable pod security context (must be `true` if runAsUser or fsGroup are set)
@@ -101,6 +89,7 @@ master:
   # fsGroup: <will be omitted in deployment if runAsUser is 0>
   servicePort: 8080
   targetPort: 8080
+  nodePort: 32001
   # For minikube, set this to NodePort, elsewhere use LoadBalancer
   # Use ClusterIP if your setup includes ingress controller
   serviceType: NodePort
@@ -116,7 +105,7 @@ master:
   # Put labels on Jenkins master pod
   podLabels: {}
   # Used to create Ingress record (should used with ServiceType: ClusterIP)
-  nodePort: 32766
+  # nodePort: <to set explicitly, choose port between 30000-32767
   # Enable Kubernetes Liveness and Readiness Probes
   # ~ 2 minutes to allow Jenkins to restart when upgrading plugins. Set ReadinessTimeout to be shorter than LivenessTimeout.
   healthProbes: true
@@ -227,6 +216,7 @@ master:
   # etc.  Best reference is https://<jenkins_url>/configuration-as-code/reference.  The example below creates a welcome message:
   JCasC:
     enabled: false
+    defaultConfig: false
     pluginVersion: "1.27"
     # it's only used when plugin version is <=1.18 for later version the
     # configuration as code support plugin is no longer needed
@@ -379,10 +369,13 @@ master:
     # The `groups` root object is added by default, simply add the rule entries
     alertingrules: []
 
+  # Can be used to disable rendering master test resources when using helm template
+  testEnabled: true
+
 agent:
   enabled: true
-  image: "joao29a/jnlp-slave-alpine-docker"
-  tag: "latest"
+  image: "jenkins/jnlp-slave"
+  tag: "3.27-1"
   customJenkinsLabels: []
   # name of the secret to be used for image pulling
   imagePullSecretName:
@@ -390,11 +383,11 @@ agent:
   privileged: false
   resources:
     requests:
-      cpu: "200m"
-      memory: "256Mi"
+      cpu: "512m"
+      memory: "512Mi"
     limits:
-      cpu: "500m"
-      memory: "256Mi"
+      cpu: "2000m"
+      memory: "2048Mi"
   # You may want to change this to true while testing a new image
   alwaysPullImage: false
   # Controls how agent pods are retained after the Jenkins build completes
@@ -409,9 +402,6 @@ agent:
   # - name: PATH
   #   value: /usr/local/bin
   volumes:
-    - type: HostPath
-      hostPath: /var/run/docker.sock
-      mountPath: /var/run/docker.sock
   # - type: Secret
   #   secretName: mysecret
   #   mountPath: /var/myapp/mysecret
@@ -432,14 +422,14 @@ agent:
   # Max number of spawned agent
   containerCap: 10
   # Pod name
-  podName: "default"
+  podName: "jenkins-executor"
   # Allows the Pod to remain active for reuse until the configured number of
   # minutes has passed since the last step was executed on it.
   idleMinutes: 0
   # Raw yaml template for the Pod. For example this allows usage of toleration for agent pods.
   # https://github.com/jenkinsci/kubernetes-plugin#using-yaml-to-define-pod-templates
   # https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  yamlTemplate:
+  yamlTemplate: ""
   # yamlTemplate: |-
   #   apiVersion: v1
   #   kind: Pod
@@ -545,4 +535,4 @@ backup:
   # Additional support can added. Visit this repository for details
   # Ref: https://github.com/maorfr/skbn
   destination: "s3://jenkins-data/backup"
-checkDeprecation: true
+checkDeprecation: false
