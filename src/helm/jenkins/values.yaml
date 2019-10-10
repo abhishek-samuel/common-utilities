@@ -375,7 +375,7 @@ master:
 agent:
   enabled: true
   image: "yonadev/jnlp-slave-k8s-helm"
-  tag: "3.27-1"
+  tag: "latest"
   customJenkinsLabels: []
   # name of the secret to be used for image pulling
   imagePullSecretName:
